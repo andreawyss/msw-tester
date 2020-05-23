@@ -1,2 +1,3 @@
 # msw-tester
- Tests msw with fetch, axios and other libs.
+
+Tests [msw](https://github.com/mswjs/msw) with fetch, axios and other libs.
