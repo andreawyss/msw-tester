@@ -3,10 +3,20 @@ import { rest } from "msw";
 const isTest = process.env.NODE_ENV === "test";
 const delay = isTest ? 1 : 700;
 
-const handler1 = rest.get(`/items`, (req, res, ctx) => {
-  const result = ["Item1", "Item2"];
+const items = ["Item1", "Item2"];
 
-  return res(ctx.delay(delay), ctx.status(200, "OK"), ctx.json(result));
+const getHandler = rest.get(`/items`, (req, res, ctx) => {
+  return res(ctx.delay(delay), ctx.status(200, "OK"), ctx.json(items));
 });
 
-export const thingsMocks = [handler1];
+const deleteHandler = rest.delete(`/items/:item`, (req, res, ctx) => {
+  const { item } = req.params;
+  const index = items.findIndex((i) => i === item);
+  if (index !== -1) {
+    items.splice(index, 1);
+  }
+
+  return res(ctx.delay(delay), ctx.status(200, "OK"), ctx.json(items));
+});
+
+export const thingsMocks = [getHandler, deleteHandler];

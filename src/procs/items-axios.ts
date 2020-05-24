@@ -11,3 +11,15 @@ export function getItemsWithAxios() {
       return [];
     });
 }
+
+export function deleteWithAxios(item: string) {
+  return axios(`/items/${item}`, { method: "delete" })
+    .then((res) => {
+      console.log("res", res);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("ERR", err);
+      return [];
+    });
+}
