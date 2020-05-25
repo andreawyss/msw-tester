@@ -1,5 +1,12 @@
 import { setupWorker } from "msw";
+import { FailOptions } from "./mock.utils";
+import { itemsMocks } from "./items/items.mocks";
 
-import { thingsMocks } from "./items/items.mocks";
+const failOptions: FailOptions = {
+  failRate: 0.2, // 20%
+  failCode: 499,
+  failText: "Simulated Failure",
+};
 
-export const worker = setupWorker(...thingsMocks);
+export const worker = setupWorker(...itemsMocks(failOptions));
+// export const worker = setupWorker(...thingsMocks());

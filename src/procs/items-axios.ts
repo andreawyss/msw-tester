@@ -1,25 +1,13 @@
 import axios from "axios";
 
 export function getItemsWithAxios() {
-  return axios("/items")
-    .then((res: any) => {
-      console.log("res", res);
-      return res.data;
-    })
-    .catch((err: any) => {
-      console.log("ERR", err);
-      return [];
-    });
+  return axios("/items").then((res: any) => {
+    return res.data;
+  });
 }
 
 export function deleteWithAxios(item: string) {
-  return axios(`/items/${item}`, { method: "delete" })
-    .then((res) => {
-      console.log("res", res);
-      return res.data;
-    })
-    .catch((err) => {
-      console.log("ERR", err);
-      return [];
-    });
+  return axios(`/items/${item}`, { method: "delete" }).then((res) => {
+    return res.data;
+  });
 }

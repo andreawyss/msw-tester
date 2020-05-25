@@ -1,9 +1,9 @@
 import { setupServer } from "msw/node";
-import { thingsMocks } from "../api/items/items.mocks";
+import { itemsMocks } from "../api/items/items.mocks";
 import { getItemsWithFetch, deleteWithFetch } from "./items-fetch";
 
 describe("items-fetch", () => {
-  const server = setupServer(...thingsMocks);
+  const server = setupServer(...itemsMocks());
 
   beforeAll(() => {
     server.listen();
@@ -15,11 +15,11 @@ describe("items-fetch", () => {
 
   it("gets items with fetch", async () => {
     const result = await getItemsWithFetch();
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(3);
   });
 
-  it("delete item with axios", async () => {
+  it("delete item with fetch", async () => {
     const result = await deleteWithFetch("Item1");
-    expect(result).toHaveLength(1);
+    expect(result).toHaveLength(2);
   });
 });

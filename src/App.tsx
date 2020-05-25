@@ -5,45 +5,42 @@ import { getItemsWithFetch, deleteWithFetch } from "./procs/items-fetch";
 export function App() {
   const [items, setItems] = useState<string[] | null>(null);
 
-  const onAxiosClick = () => {
+  const onAxiosGet = async () => {
     setItems(null);
-    getItemsWithAxios().then((items) => {
-      setItems(items);
-    });
+    const items = await getItemsWithAxios();
+    setItems(items);
   };
 
-  const onFetchClick = () => {
-    setItems(null);
-    getItemsWithFetch().then((items) => {
-      setItems(items);
-    });
-  };
-
-  const onAxiosDelete = () => {
+  const onAxiosDelete = async () => {
     const item = items && items[0];
     if (item) {
-      deleteWithAxios(item).then((items) => {
-        setItems(items);
-      });
+      const items = await deleteWithAxios(item);
+      setItems(items);
     }
   };
 
-  const onFetchDelete = () => {
+  const onFetchGet = async () => {
+    setItems(null);
+    const items = await getItemsWithFetch();
+    setItems(items);
+  };
+
+  const onFetchDelete = async () => {
     const item = items && items[0];
     if (item) {
-      deleteWithFetch(item).then((items) => {
-        setItems(items);
-      });
+      const items = await deleteWithFetch(item);
+      setItems(items);
     }
   };
 
   return (
     <div>
-      <button onClick={onAxiosClick}>get items with axios</button>
-      <br />
-      <button onClick={onFetchClick}>get items with fetch</button>
+      <button onClick={onAxiosGet}>get items with axios</button>
       <br />
       <button onClick={onAxiosDelete}>delete item with axios</button>
+      <br />
+      <br />
+      <button onClick={onFetchGet}>get items with fetch</button>
       <br />
       <button onClick={onFetchDelete}>delete item with fetch</button>
       <br />
