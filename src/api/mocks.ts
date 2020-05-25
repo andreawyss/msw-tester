@@ -9,4 +9,3 @@ const failOptions: FailOptions = {
 };
 
 export const worker = setupWorker(...itemsMocks(failOptions));
-// export const worker = setupWorker(...thingsMocks());
