@@ -21,7 +21,7 @@ export type SetupOptions = {
 
 export function shouldFail(setupOptions: SetupOptions = {}) {
   const { failOptions = {} } = setupOptions;
-  const { failRate = 0 } = failOptions;
+  const { failRate = 0 }: FailOptions = failOptions;
   return Math.random() < failRate;
 }
 
@@ -29,10 +29,13 @@ export function failResponse(
   req: MockedRequest,
   res: ResponseComposition,
   ctx: any,
-  setupOptions: any = {}
+  setupOptions: SetupOptions = {}
 ) {
   const { failOptions = {} } = setupOptions;
-  const { failCode = '555', failText = 'Mocked Error' } = failOptions;
+  const {
+    failCode = 555,
+    failText = 'Mocked Error',
+  }: FailOptions = failOptions;
 
   return res(mockLatency(ctx), ctx.status(failCode, failText));
 }

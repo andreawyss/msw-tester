@@ -1,10 +1,10 @@
 import { rest } from 'msw';
 import { mockLatency } from '../mock-latency';
-import { shouldFail, failResponse } from '../mock-setup';
+import { shouldFail, failResponse, SetupOptions } from '../mock-setup';
 
 const items = ['Item1', 'Item2', 'Item3'];
 
-const getHandler = (setupOptions: any) =>
+const getHandler = (setupOptions: SetupOptions) =>
   rest.get(`/items`, (req, res, ctx) => {
     if (shouldFail(setupOptions)) {
       return failResponse(req, res, ctx, setupOptions);
@@ -13,7 +13,7 @@ const getHandler = (setupOptions: any) =>
     return res(mockLatency(ctx), ctx.status(200, 'OK'), ctx.json(items));
   });
 
-const deleteHandler = (setupOptions: any) =>
+const deleteHandler = (setupOptions: SetupOptions) =>
   rest.delete(`/items/:item`, (req, res, ctx) => {
     if (shouldFail(setupOptions)) {
       return failResponse(req, res, ctx, setupOptions);
@@ -28,7 +28,7 @@ const deleteHandler = (setupOptions: any) =>
     return res(mockLatency(ctx), ctx.status(200, 'OK'), ctx.json(items));
   });
 
-export const itemsMocks = (setupOptions = {}) => [
+export const itemsMocks = (setupOptions: SetupOptions = {}) => [
   getHandler(setupOptions),
   deleteHandler(setupOptions),
 ];
