@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
 export function getItemsWithAxios() {
-  return axios("/items").then((res: any) => {
+  return axios('/items').then((res: any) => {
     return res.data;
   });
 }
 
 export function deleteWithAxios(item: string) {
-  return axios(`/items/${item}`, { method: "delete" }).then((res) => {
+  return axios(`/items/${item}`, { method: 'delete' }).then((res) => {
     return res.data;
   });
 }

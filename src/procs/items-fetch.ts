@@ -8,7 +8,7 @@ export function getItemsWithFetch() {
 }
 
 export function deleteWithFetch(item: string) {
-  return fetch(`/items/${item}`, { method: "delete" }).then((res) => {
+  return fetch(`/items/${item}`, { method: 'delete' }).then((res) => {
     if (res.status !== 200) {
       return Promise.reject({ status: res.status, message: res.statusText });
     }

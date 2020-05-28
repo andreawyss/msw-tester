@@ -1,18 +1,16 @@
-import { setupServer } from "msw/node";
-import { itemsMocks } from "../api/items/items.mocks";
-import { getItemsWithAxios, deleteWithAxios } from "./items-axios";
+import { setupServer } from 'msw/node';
+import { FailOptions } from '../api/mock-setup';
+import { itemsMocks } from '../api/items/items.mocks';
+import { getItemsWithAxios, deleteWithAxios } from './items-axios';
 
-const expectedStatusCode = 400;
-const expectedStatusText = "TEST ERROR";
+const failOptions: FailOptions = {
+  failRate: 1, // always
+  failCode: 501,
+  failText: 'MOCKED TEST ERROR',
+};
 
-describe("items-axios", () => {
-  const server = setupServer(
-    ...itemsMocks({
-      failRate: 1, // always
-      failCode: expectedStatusCode,
-      failText: expectedStatusText,
-    })
-  );
+describe('items-axios', () => {
+  const server = setupServer(...itemsMocks({ failOptions }));
 
   beforeAll(() => {
     server.listen();
@@ -22,21 +20,23 @@ describe("items-axios", () => {
     server.close();
   });
 
-  it.only("gets items with axios fails", async () => {
+  it('gets items with axios fails', async () => {
     try {
       await getItemsWithAxios();
+      fail('Unexpected success');
     } catch (err) {
-      expect(err.response.status).toBe(expectedStatusCode);
-      expect(err.response.statusText).toBe(expectedStatusText);
+      expect(err.response.status).toBe(failOptions.failCode);
+      expect(err.response.statusText).toBe(failOptions.failText);
     }
   });
 
-  it.only("delete item with axios fails", async () => {
+  it('delete item with axios fails', async () => {
     try {
-      await deleteWithAxios("Item1");
+      await deleteWithAxios('Item1');
+      fail('Unexpected success');
     } catch (err) {
-      expect(err.response.status).toBe(expectedStatusCode);
-      expect(err.response.statusText).toBe(expectedStatusText);
+      expect(err.response.status).toBe(failOptions.failCode);
+      expect(err.response.statusText).toBe(failOptions.failText);
     }
   });
 });

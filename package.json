@@ -6,8 +6,8 @@
     "start": "react-scripts start",
     "start-https": "HTTPS=true SSL_CRT_FILE=dev.crt SSL_KEY_FILE=dev.key HOST=localdev react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "lint": "eslint --ext js,ts,tsx src",
+    "test": "react-scripts test"
   },
   "dependencies": {
     "axios": "0.19.2",
@@ -40,5 +40,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }

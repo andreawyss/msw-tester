@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { getItemsWithAxios, deleteWithAxios } from "./procs/items-axios";
-import { getItemsWithFetch, deleteWithFetch } from "./procs/items-fetch";
+import React, { useState } from 'react';
+import { getItemsWithAxios, deleteWithAxios } from './procs/items-axios';
+import { getItemsWithFetch, deleteWithFetch } from './procs/items-fetch';
 
 export function App() {
   const [items, setItems] = useState<string[] | null>(null);

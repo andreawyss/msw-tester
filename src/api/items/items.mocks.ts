@@ -1,26 +1,22 @@
-import { rest } from "msw";
-import {
-  delayAmount,
-  shouldFail,
-  failResponse,
-  FailOptions,
-} from "../mock.utils";
+import { rest } from 'msw';
+import { mockLatency } from '../mock-latency';
+import { shouldFail, failResponse } from '../mock-setup';
 
-const items = ["Item1", "Item2", "Item3"];
+const items = ['Item1', 'Item2', 'Item3'];
 
-const getHandler = (failOptions: FailOptions = {}) =>
+const getHandler = (setupOptions: any) =>
   rest.get(`/items`, (req, res, ctx) => {
-    if (shouldFail(failOptions)) {
-      return failResponse(req, res, ctx, failOptions);
+    if (shouldFail(setupOptions)) {
+      return failResponse(req, res, ctx, setupOptions);
     }
 
-    return res(ctx.delay(delayAmount), ctx.status(200, "OK"), ctx.json(items));
+    return res(mockLatency(ctx), ctx.status(200, 'OK'), ctx.json(items));
   });
 
-const deleteHandler = (failOptions: FailOptions = {}) =>
+const deleteHandler = (setupOptions: any) =>
   rest.delete(`/items/:item`, (req, res, ctx) => {
-    if (shouldFail(failOptions)) {
-      return failResponse(req, res, ctx, failOptions);
+    if (shouldFail(setupOptions)) {
+      return failResponse(req, res, ctx, setupOptions);
     }
 
     const { item } = req.params;
@@ -29,10 +25,10 @@ const deleteHandler = (failOptions: FailOptions = {}) =>
       items.splice(index, 1);
     }
 
-    return res(ctx.delay(delayAmount), ctx.status(200, "OK"), ctx.json(items));
+    return res(mockLatency(ctx), ctx.status(200, 'OK'), ctx.json(items));
   });
 
-export const itemsMocks = (failOptions: FailOptions = {}) => [
-  getHandler(failOptions),
-  deleteHandler(failOptions),
+export const itemsMocks = (setupOptions = {}) => [
+  getHandler(setupOptions),
+  deleteHandler(setupOptions),
 ];
