@@ -1,6 +1,10 @@
 import { rest } from 'msw';
-import { mockLatency } from '../mock-latency';
-import { shouldFail, failResponse, SetupOptions } from '../mock-setup';
+import {
+  failResponse,
+  shouldFail,
+  mockLatency,
+  SetupOptions,
+} from '../mock.utils';
 
 const items = ['Item1', 'Item2', 'Item3'];
 

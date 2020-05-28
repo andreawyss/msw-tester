@@ -1,5 +1,5 @@
 import { setupWorker } from 'msw';
-import { FailOptions } from './mock-setup';
+import { FailOptions } from './mock.utils';
 import { itemsMocks } from './items/items.mocks';
 
 const failOptions: FailOptions = {

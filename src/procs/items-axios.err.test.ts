@@ -1,5 +1,5 @@
 import { setupServer } from 'msw/node';
-import { FailOptions } from '../api/mock-setup';
+import { FailOptions } from '../api/mock.utils';
 import { itemsMocks } from '../api/items/items.mocks';
 import { getItemsWithAxios, deleteWithAxios } from './items-axios';
 

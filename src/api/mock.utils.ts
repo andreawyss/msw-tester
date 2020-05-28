@@ -1,6 +1,16 @@
 import { MockedRequest } from 'msw';
+import { ResponseTransformer } from 'msw/lib/types';
 import { ResponseComposition } from 'msw/lib/types/response';
-import { mockLatency } from './mock-latency';
+
+const isTest = process.env.NODE_ENV === 'test';
+
+const latencyAmount = isTest ? 1 : 700;
+
+export const mockLatency = (ctx: {
+  delay: (value: number) => ResponseTransformer;
+}) => {
+  return ctx.delay(latencyAmount);
+};
 
 export type FailOptions = {
   /** The failure statusCode */
