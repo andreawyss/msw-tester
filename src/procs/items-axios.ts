@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function getItemsWithAxios() {
-  return axios('/items').then((res: any) => {
+  return axios('/items').then((res) => {
     return res.data;
   });
 }
