@@ -2,20 +2,12 @@ import { MockedRequest } from 'msw';
 import { ResponseTransformer } from 'msw/lib/types';
 import { ResponseComposition } from 'msw/lib/types/response';
 
-type baseContext = {
+type BaseContext = {
   delay: (durationMs: number) => ResponseTransformer;
   status: (
     statusCode: number,
     statusText?: string | undefined
   ) => ResponseTransformer;
-};
-
-const isTest = process.env.NODE_ENV === 'test';
-
-const latencyAmount = isTest ? 1 : 700;
-
-export const mockLatency = (ctx: baseContext) => {
-  return ctx.delay(latencyAmount);
 };
 
 export type FailOptions = {
@@ -44,7 +36,7 @@ export function shouldFail(setupOptions: SetupOptions = {}) {
 export function failResponse(
   req: MockedRequest,
   res: ResponseComposition,
-  ctx: baseContext,
+  ctx: BaseContext,
   setupOptions: SetupOptions = {}
 ) {
   const { failOptions = {} } = setupOptions;
@@ -55,3 +47,11 @@ export function failResponse(
 
   return res(mockLatency(ctx), ctx.status(failCode, failText));
 }
+
+const isTest = process.env.NODE_ENV === 'test';
+
+const latencyAmount = isTest ? 1 : 700;
+
+export const mockLatency = (ctx: BaseContext) => {
+  return ctx.delay(latencyAmount);
+};
