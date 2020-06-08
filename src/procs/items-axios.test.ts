@@ -9,18 +9,20 @@ const failOptions: FailOptions = {
   failText: 'MOCKED TEST ERROR',
 };
 
-describe('items-axios', () => {
-  const server = setupServer(...itemsMocks({ failOptions }));
+const server = setupServer(...itemsMocks());
 
-  beforeAll(() => {
-    server.listen();
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+describe('getItemsWithAxios', () => {
+  it('gets items', async () => {
+    const result = await getItemsWithAxios();
+    expect(result).toHaveLength(3);
   });
 
-  afterAll(() => {
-    server.close();
-  });
-
-  it('gets items with axios fails', async () => {
+  it('handles server error', async () => {
+    server.use(...itemsMocks({ failOptions }));
     try {
       await getItemsWithAxios();
       fail('Unexpected success');
@@ -29,8 +31,16 @@ describe('items-axios', () => {
       expect(err.response.statusText).toBe(failOptions.failText);
     }
   });
+});
 
-  it('delete item with axios fails', async () => {
+describe('deleteWithAxios', () => {
+  it('deletes item', async () => {
+    const result = await deleteWithAxios('Item1');
+    expect(result).toHaveLength(2);
+  });
+
+  it('handles server error', async () => {
+    server.use(...itemsMocks({ failOptions }));
     try {
       await deleteWithAxios('Item1');
       fail('Unexpected success');
