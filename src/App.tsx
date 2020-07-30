@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { getItemsWithAxios, deleteWithAxios } from './procs/items-axios';
 import { getItemsWithFetch, deleteWithFetch } from './procs/items-fetch';
+import { getItemsWithWretch, deleteWithWretch } from './procs/items-wretch';
 
 export function App() {
   const [items, setItems] = useState<string[] | null>(null);
@@ -33,16 +34,47 @@ export function App() {
     }
   };
 
+  const onWretchGet = async () => {
+    setItems(null);
+    try {
+      const items = await getItemsWithWretch();
+      setItems(items);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onWretchDelete = async () => {
+    try {
+      const item = items && items[0];
+      if (item) {
+        const items = await deleteWithWretch(item);
+        setItems(items);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div>
-      <button onClick={onAxiosGet}>get items with axios</button>
+      axios
       <br />
-      <button onClick={onAxiosDelete}>delete item with axios</button>
+      <button onClick={onAxiosGet}>get items</button>
+      <button onClick={onAxiosDelete}>delete item</button>
       <br />
       <br />
-      <button onClick={onFetchGet}>get items with fetch</button>
+      fetch
       <br />
-      <button onClick={onFetchDelete}>delete item with fetch</button>
+      <button onClick={onFetchGet}>get items</button>
+      <button onClick={onFetchDelete}>delete item</button>
+      <br />
+      <br />
+      wretch
+      <br />
+      <button onClick={onWretchGet}>get items</button>
+      <button onClick={onWretchDelete}>delete item</button>
+      <br />
       <br />
       items: <strong>{JSON.stringify(items, null, 2)}</strong>
     </div>

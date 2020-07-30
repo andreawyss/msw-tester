@@ -14,7 +14,7 @@ const getHandler = (setupOptions: SetupOptions) =>
       return failResponse(req, res, ctx, setupOptions);
     }
 
-    return res(mockLatency(ctx), ctx.status(200, 'OK'), ctx.json(items));
+    return res(mockLatency(ctx), ctx.status(200), ctx.json(items));
   });
 
 const deleteHandler = (setupOptions: SetupOptions) =>
@@ -29,7 +29,7 @@ const deleteHandler = (setupOptions: SetupOptions) =>
       items.splice(index, 1);
     }
 
-    return res(mockLatency(ctx), ctx.status(200, 'OK'), ctx.json(items));
+    return res(mockLatency(ctx), ctx.status(200), ctx.json(items));
   });
 
 export const itemsMocks = (setupOptions: SetupOptions = {}) => [

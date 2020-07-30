@@ -12,7 +12,8 @@
   "dependencies": {
     "axios": "0.19.2",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "wretch": "1.7.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.9.0",

@@ -23,13 +23,9 @@ describe('getItemsWithAxios', () => {
 
   it('handles server error', async () => {
     server.use(...itemsMocks({ failOptions }));
-    try {
-      await getItemsWithAxios();
-      fail('Unexpected success');
-    } catch (err) {
-      expect(err.response.status).toBe(failOptions.failCode);
-      expect(err.response.statusText).toBe(failOptions.failText);
-    }
+    await expect(getItemsWithAxios()).rejects.toThrowError(
+      `Request failed with status code ${failOptions.failCode}`
+    );
   });
 });
 
@@ -41,12 +37,9 @@ describe('deleteWithAxios', () => {
 
   it('handles server error', async () => {
     server.use(...itemsMocks({ failOptions }));
-    try {
-      await deleteWithAxios('Item1');
-      fail('Unexpected success');
-    } catch (err) {
-      expect(err.response.status).toBe(failOptions.failCode);
-      expect(err.response.statusText).toBe(failOptions.failText);
-    }
+
+    await expect(deleteWithAxios('Item1')).rejects.toThrowError(
+      `Request failed with status code ${failOptions.failCode}`
+    );
   });
 });
