@@ -1,13 +1,13 @@
 /**
  * Mock Service Worker.
- * @see https://github.com/open-draft/msw
+ * @see https://github.com/mswjs/msw
  * - Please do NOT modify this file.
  * - Please do NOT serve this file on production.
  */
 /* eslint-disable */
 /* tslint:disable */
 
-const INTEGRITY_CHECKSUM = 'e6b416d66cdb446c2c36c6309940107d'
+const INTEGRITY_CHECKSUM = 'd1e0e502f550d40a34bee90822e4bf98'
 const bypassHeaderName = 'x-msw-bypass'
 
 let clients = {}
@@ -27,6 +27,13 @@ self.addEventListener('message', async function (event) {
   const allClientIds = allClients.map((client) => client.id)
 
   switch (event.data) {
+    case 'KEEPALIVE_REQUEST': {
+      sendToClient(client, {
+        type: 'KEEPALIVE_RESPONSE',
+      })
+      break
+    }
+
     case 'INTEGRITY_CHECK_REQUEST': {
       sendToClient(client, {
         type: 'INTEGRITY_CHECK_RESPONSE',
@@ -79,7 +86,7 @@ self.addEventListener('fetch', async function (event) {
   }
 
   event.respondWith(
-    new Promise(async (resolve) => {
+    new Promise(async (resolve, reject) => {
       const client = await event.target.clients.get(clientId)
 
       if (
@@ -107,9 +114,7 @@ self.addEventListener('fetch', async function (event) {
       }
 
       const reqHeaders = serializeHeaders(request.headers)
-      const body = request.headers.get('content-type')?.includes('json')
-        ? await request.json()
-        : await request.text()
+      const body = await request.text()
 
       const rawClientMessage = await sendToClient(client, {
         type: 'REQUEST',
@@ -131,7 +136,7 @@ self.addEventListener('fetch', async function (event) {
         },
       })
 
-      const clientMessage = JSON.parse(rawClientMessage)
+      const clientMessage = rawClientMessage
 
       switch (clientMessage.type) {
         case 'MOCK_SUCCESS': {
@@ -146,6 +151,15 @@ self.addEventListener('fetch', async function (event) {
           return resolve(getOriginalResponse())
         }
 
+        case 'NETWORK_ERROR': {
+          const { name, message } = clientMessage.payload
+          const networkError = new Error(message)
+          networkError.name = name
+
+          // Rejecting a request Promise emulates a network error.
+          return reject(networkError)
+        }
+
         case 'INTERNAL_ERROR': {
           const parsedBody = JSON.parse(clientMessage.payload.body)
 
@@ -157,7 +171,7 @@ ${parsedBody.errorType}: ${parsedBody.message}
 (see more detailed error stack trace in the mocked response body)
 
 This exception has been gracefully handled as a 500 response, however, it's strongly recommended to resolve this error.
-If you wish to mock an error response, please refer to this guide: https://redd.gitbook.io/msw/recipes/mocking-error-responses\
+If you wish to mock an error response, please refer to this guide: https://mswjs.io/docs/recipes/mocking-error-responses\
   `,
             request.method,
             request.url,
